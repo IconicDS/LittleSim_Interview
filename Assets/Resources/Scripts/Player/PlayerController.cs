@@ -30,22 +30,38 @@ public class PlayerController : MonoBehaviour
         r2d = GetComponent<Rigidbody2D>();
 
         anim = GetComponent<Animator>();
+
+        /// I want the original Player game
+        /// object to stay alive no matter what
+        /// scene is currently loaded.
+        DontDestroyOnLoad(this.gameObject);
     }
 
     void Update()
     {
         /// First we want to detect when the player is trying
         /// to move and feed that data to our pre-defined
-        /// variables that will allow movement
-        
-        horizontalMovement = Input.GetAxis("Horizontal") * (walkingSpeed);
-        verticalMovement = Input.GetAxis("Vertical") * (walkingSpeed);
+        /// variables that will allow movement.
+        /// 
+        /// We don't want the player to move while the screen
+        /// transitions is happening. So we will lock the players
+        /// location where they are until the screen is empty.
+
+        if (CanvasController.isScreenEmpty())
+        {
+            horizontalMovement = Input.GetAxis("Horizontal") * (walkingSpeed);
+            verticalMovement = Input.GetAxis("Vertical") * (walkingSpeed);
+        } else
+        {
+            horizontalMovement = 0;
+            verticalMovement = 0;
+        }
     }
 
     private void FixedUpdate()
     {
         /// This is where we want to write the
-        /// code that will allow the player to move
+        /// code that will allow the player to move.
 
         r2d.MovePosition(new Vector2(transform.position.x + (horizontalMovement * Time.deltaTime), transform.position.y + (verticalMovement * Time.deltaTime)));
     }
