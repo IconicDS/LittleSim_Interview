@@ -23,16 +23,6 @@ public class SceneQueue : MonoBehaviour
     private void Start()
     {
         player = GameObject.Find("Player");
-        playerPosition = new Vector3(0, 2.83F, 0);
-
-        /// We only want to keep the game object
-        /// with the name SceneQueue alive throughout
-        /// every scene we enter. We do not want to
-        /// carry over actual triggers.
-        if (gameObject.name.Equals("SceneQueue"))
-        {
-            DontDestroyOnLoad(this.gameObject);
-        }
     }
 
     public static void queueScene(string s)
@@ -87,6 +77,6 @@ public class SceneQueue : MonoBehaviour
     ///  This will close the window from the main menu.
     public void closeApplication()
     {
-        Application.Quit(0);
+        Application.Quit();
     }
 }

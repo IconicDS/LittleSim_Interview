@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,9 +16,11 @@ public class CanvasController : MonoBehaviour
     private GameObject transCircle;
     private static bool transition;
     private static float transFill;
-    private float transitionSpeed = 0.5F;
+    private float transitionSpeed = 0.75F;
 
     private GameObject menu;
+
+    private static GameObject shop;
 
     // Start is called before the first frame update
     void Start()
@@ -26,7 +29,10 @@ public class CanvasController : MonoBehaviour
 
         menu = transform.Find("Menu").gameObject;
 
+        shop = transform.Find("Shop").gameObject;
+
         DontDestroyOnLoad(this.gameObject);
+        DontDestroyOnLoad(GameObject.Find("EventSystem"));
     }
 
     // Update is called once per frame
@@ -42,10 +48,16 @@ public class CanvasController : MonoBehaviour
             menu.SetActive(false);
         }
 
+        updateTransition();
+    }
+
+
+    public void updateTransition()
+    {
         /// The 'transition' variable will
         /// start transition animation between
         /// scenes.
-        if(transition)
+        if (transition)
         {
             /// We want to start filling the image
             /// until it is full. Once the screen
@@ -53,13 +65,14 @@ public class CanvasController : MonoBehaviour
             /// scenes.
             transFill += Time.deltaTime * transitionSpeed;
 
-            if(transFill >= 1.5F)
+            if (transFill >= 1.5F)
             {
                 transition = false;
             }
-        } else
+        }
+        else
         {
-            if(transFill > 0)
+            if (transFill > 0)
             {
                 transFill -= Time.deltaTime * transitionSpeed;
             }
@@ -68,18 +81,30 @@ public class CanvasController : MonoBehaviour
         transCircle.GetComponent<Image>().fillAmount = transFill;
     }
 
+    /// This will start the animation for the
+    /// scene transition.
     public static void runTransition()
     {
         CanvasController.transition = true;
     }
 
+    /// This is to check if the screen is fully
+    /// black and will allow the scene to switch.
     public static bool isScreenBlack()
     {
         return CanvasController.transFill > 1;
     }
 
+    /// This is to check if the screen is empty
+    /// and we can allow the user to start walking
+    /// again.
     public static bool isScreenEmpty()
     {
         return CanvasController.transFill <= 0;
+    }
+
+    public static void openShop()
+    {
+        shop.SetActive(true);
     }
 }

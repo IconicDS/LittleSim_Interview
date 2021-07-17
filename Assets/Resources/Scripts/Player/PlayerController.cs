@@ -12,9 +12,16 @@ public class PlayerController : MonoBehaviour
     /// player.
     /// </summary>
 
+    private static PlayerInventory inventory;
+
     private Rigidbody2D r2d;
 
     private Animator anim;
+
+    private static Color shirtColor;
+    private static Color pantsColor;
+    private static GameObject shirt;
+    private static GameObject pants;
 
     [SerializeField] float walkingSpeed = 2.0F;
     private float horizontalMovement = 0.0F;
@@ -26,10 +33,17 @@ public class PlayerController : MonoBehaviour
         /// needed to run the Player controller
         /// properly here since this is the first
         /// function called.
-        
+
+        inventory = new PlayerInventory();
+        shirt = transform.Find("Shirt").gameObject;
+        pants = transform.Find("Pants").gameObject;
+
         r2d = GetComponent<Rigidbody2D>();
 
         anim = GetComponent<Animator>();
+
+        shirtColor = Color.red;
+        pantsColor = Color.blue;
 
         /// I want the original Player game
         /// object to stay alive no matter what
@@ -113,6 +127,51 @@ public class PlayerController : MonoBehaviour
                     }
                 }
             }
+        }
+    }
+
+    /// This will give us away to equip different
+    /// colored clothing. We can also do a similar
+    /// thing to change the design on the shirt
+    /// with different sprites.
+    public static void setShirtColor(Color col)
+    {
+        shirtColor = col;
+    }
+
+    public static void setPantsColor(Color col)
+    {
+        pantsColor = col;
+    }
+
+    public static Color getShirtColor()
+    {
+        return shirtColor;
+    }
+
+    public static Color getPantsColor()
+    {
+        return pantsColor;
+    }
+
+    public static PlayerInventory getInventory()
+    {
+        return inventory;
+    }
+
+    public static void equipShirt(Color c)
+    {
+        if(getInventory().getShirts().Contains(c))
+        {
+            shirt.GetComponent<SpriteRenderer>().color = c;
+        }
+    }
+
+    public static void equipPants(Color c)
+    {
+        if (getInventory().getPants().Contains(c))
+        {
+            pants.GetComponent<SpriteRenderer>().color = c;
         }
     }
 }
